@@ -183,6 +183,46 @@
     #tc-gas.drifting { background: rgba(120, 90, 15, 0.7); border-color: #ffc23f; box-shadow: 0 0 22px rgba(255, 194, 63, 0.7); }
     #tc-brake { right: calc(160px + env(safe-area-inset-right)); bottom: calc(30px + env(safe-area-inset-bottom)); width: 95px; height: 95px; font-size: 17px; background: rgba(110, 25, 25, 0.55); }
     #tc-horn  { left: calc(87px + env(safe-area-inset-left)); bottom: calc(155px + env(safe-area-inset-bottom)); width: 80px; height: 80px; font-size: 30px; }
+
+    /* ---- Dynamische Skalierung: iPhone bis iPad gleichermaßen spielbar ----
+       Alle Maße skalieren mit der kurzen Bildschirmseite (vmin) und sind per
+       clamp() nach oben (iPad) und unten (iPhone) begrenzt. Späterer Quelltext
+       + gleiche/höhere Spezifität => gewinnt gegen die festen px-Regeln oben. */
+    #score-box { font-size: clamp(16px, 3.3vmin, 26px); padding: clamp(6px, 1.2vmin, 10px) clamp(11px, 2.4vmin, 18px); }
+    #score-box small { font-size: clamp(8px, 1.5vmin, 12px); }
+    #combo { top: clamp(60px, 11.3vmin, 96px); font-size: clamp(15px, 2.6vmin, 20px); }
+    #missions { top: clamp(102px, 19vmin, 158px); width: clamp(165px, 30vmin, 235px); font-size: clamp(11px, 2.1vmin, 13px); }
+    #status-text { font-size: clamp(13px, 2.3vmin, 17px); }
+    body.touch #status { min-width: clamp(150px, 30vmin, 240px); padding: clamp(6px, 1.2vmin, 8px) clamp(12px, 2.6vmin, 18px); }
+    #minimap { width: clamp(112px, 20vmin, 190px); height: clamp(135px, 24.2vmin, 230px); }
+    .screen { overflow-y: auto; padding: clamp(8px, 2vmin, 24px); }
+    .screen h1 { font-size: clamp(26px, 7vmin, 64px); margin-bottom: clamp(3px, 1vmin, 8px); }
+    .screen .sub { font-size: clamp(11px, 2.4vmin, 18px); margin-bottom: clamp(8px, 2.5vmin, 22px); }
+    .screen .keys { font-size: clamp(10px, 2vmin, 15px); margin-bottom: clamp(8px, 3vmin, 28px); gap: clamp(3px, 1vmin, 6px) clamp(10px, 2vmin, 18px); }
+    .courses { gap: clamp(8px, 1.6vmin, 14px); margin-bottom: clamp(8px, 3vmin, 26px); }
+    .course-card { width: clamp(150px, 24vmin, 220px); padding: clamp(8px, 1.6vmin, 14px) clamp(10px, 2vmin, 16px) !important; }
+    .course-card b { font-size: clamp(14px, 2.2vmin, 18px); }
+    .course-card span { font-size: clamp(10px, 1.8vmin, 13px); }
+    .screen button { font-size: clamp(16px, 3vmin, 22px); padding: clamp(10px, 2vmin, 14px) clamp(26px, 5vmin, 40px); }
+
+    /* Touch-Buttons: Größe UND Randabstände skalieren mit, damit auf dem iPhone
+       nichts überlappt und auf dem iPad die gewohnte Größe bleibt. */
+    body.touch #touch-controls {
+      --edge: max(16px, 2.4vmin);
+      --gap: clamp(8px, 1.8vmin, 16px);
+      --steer: clamp(78px, 13.5vmin, 110px);
+      --gas: clamp(86px, 15vmin, 120px);
+      --brake: clamp(64px, 11vmin, 95px);
+      --horn: clamp(56px, 9.5vmin, 80px);
+    }
+    body.touch #tc-left  { left: calc(var(--edge) + env(safe-area-inset-left)); bottom: calc(var(--edge) + env(safe-area-inset-bottom)); width: var(--steer); height: var(--steer); font-size: clamp(30px, 5.5vmin, 44px); }
+    body.touch #tc-right { left: calc(var(--edge) + var(--steer) + var(--gap) + env(safe-area-inset-left)); bottom: calc(var(--edge) + env(safe-area-inset-bottom)); width: var(--steer); height: var(--steer); font-size: clamp(30px, 5.5vmin, 44px); }
+    body.touch #tc-gas   { right: calc(var(--edge) + env(safe-area-inset-right)); bottom: calc(var(--edge) + env(safe-area-inset-bottom)); width: var(--gas); height: var(--gas); font-size: clamp(15px, 2.7vmin, 22px); }
+    body.touch #tc-brake { right: calc(var(--edge) + var(--gas) + var(--gap) + env(safe-area-inset-right)); bottom: calc(var(--edge) + env(safe-area-inset-bottom)); width: var(--brake); height: var(--brake); font-size: clamp(12px, 2.1vmin, 17px); }
+    /* Hupe in die untere Reihe rechts neben die beiden Lenktasten – so
+       kollidiert sie auf kleinen Screens nicht mit dem Missionen-Panel und
+       bleibt trotzdem für den linken Daumen erreichbar. */
+    body.touch #tc-horn  { left: calc(var(--edge) + 2 * var(--steer) + 2 * var(--gap) + env(safe-area-inset-left)); bottom: calc(var(--edge) + env(safe-area-inset-bottom)); width: var(--horn); height: var(--horn); font-size: clamp(22px, 4vmin, 30px); }
   </style>
   <script type="module">
 (function(){const t=document.createElement("link").relList;if(t&&t.supports&&t.supports("modulepreload"))return;for(const s of document.querySelectorAll('link[rel="modulepreload"]'))n(s);new MutationObserver(s=>{for(const r of s)if(r.type==="childList")for(const a of r.addedNodes)a.tagName==="LINK"&&a.rel==="modulepreload"&&n(a)}).observe(document,{childList:!0,subtree:!0});function e(s){const r={};return s.integrity&&(r.integrity=s.integrity),s.referrerPolicy&&(r.referrerPolicy=s.referrerPolicy),s.crossOrigin==="use-credentials"?r.credentials="include":s.crossOrigin==="anonymous"?r.credentials="omit":r.credentials="same-origin",r}function n(s){if(s.ep)return;s.ep=!0;const r=e(s);fetch(s.href,r)}})();/**
